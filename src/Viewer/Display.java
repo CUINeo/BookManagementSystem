@@ -1,10 +1,15 @@
 package Viewer;
 
-import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
+import javax.swing.*;
+
+import Entities.User;
+import dbOperation.dbHandler;
 
 public class Display extends JFrame {
+    // Database handler
+    static dbHandler dbH = new dbHandler();
+
     // Four main panels
     private logPanel log;
     private adminPanel admin;
@@ -21,6 +26,14 @@ public class Display extends JFrame {
     private JButton trueRegisterButton;
     private JTextArea regUserName;
     private JPasswordField regPasswd;
+    private JTextArea regContact;
+    private JTextArea regAddress;
+
+    // Elements in user panel
+    private User userInfo;
+
+    // Elements in admin panel
+//    private ArrayList<Book> books;
 
     private Display() {
         super("图书管理系统");
@@ -30,9 +43,7 @@ public class Display extends JFrame {
 
         // Initial all panels
         initLog();
-        initAdmin();
         initRegister();
-        initUser();
     }
 
     // -------------------- Init the login panel -----------------------
@@ -51,7 +62,32 @@ public class Display extends JFrame {
     private void Login() {
         // Query the database and load the user panel or admin panel
         String name = userName.getText();
-        String pwd = Arrays.toString(passwd.getPassword());
+        String pwd = new String(passwd.getPassword());
+
+        boolean ret = dbH.loginQuery(name, pwd);
+        if (ret) {
+            // Login success
+            remove(log);
+
+            if (name.equals("admin")) {
+                // Init the admin panel and switch to it
+                initAdmin();
+
+                add(admin, BorderLayout.CENTER);
+            }
+            else {
+                // Init the user panel and switch to it
+
+                add(user, BorderLayout.CENTER);
+            }
+
+            setVisible(true);
+            repaint();
+        } else {
+            // Login fail
+            JOptionPane.showMessageDialog(null, "用户名与密码不匹配！",
+                    "错误", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void switchToRegister() {
@@ -62,29 +98,48 @@ public class Display extends JFrame {
         repaint();
     }
 
-    // -------------------- Init the admin panel -----------------------
-    private void initAdmin() {
-        admin = new adminPanel();
-    }
-
     // -------------------- Init the register panel --------------------
     private void initRegister() {
         register = new registerPanel();
         trueRegisterButton = register.registerButton;
         regUserName = register.userName;
         regPasswd = register.passwd;
+        regAddress = register.address;
+        regContact = register.contact;
 
         trueRegisterButton.addActionListener(e -> Register());
     }
 
     private void Register() {
         String name = regUserName.getText();
-        String pwd = Arrays.toString(regPasswd.getPassword());
+        String pwd = new String(regPasswd.getPassword());
+        String address = regAddress.getText();
+        String contact = regContact.getText();
+
+        if (dbH.registerQuery(name, pwd, address, contact)) {
+            JOptionPane.showMessageDialog(null, "注册成功！",
+                    "消息", JOptionPane.ERROR_MESSAGE);
+
+            // Return to login panel
+            remove(register);
+            add(log, BorderLayout.CENTER);
+            setVisible(true);
+            repaint();
+        }
+        else
+            JOptionPane.showMessageDialog(null, "用户名被占用或输入格式有误！",
+                    "错误", JOptionPane.ERROR_MESSAGE);
+    }
+
+
+    // -------------------- Init the admin panel -----------------------
+    private void initAdmin() {
+        admin = new adminPanel();
     }
 
     // -------------------- Init the user panel ------------------------
     private void initUser() {
-        user = new userPanel();
+        user = new userPanel(userInfo);
     }
 
     // -------------------- Show the main frame ------------------------
