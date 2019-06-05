@@ -1,9 +1,9 @@
 package Viewer;
 
+import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
-import java.awt.*;
+import javax.swing.border.EtchedBorder;
 
 public class registerPanel extends JPanel {
     public JPanel register;
@@ -41,39 +41,47 @@ public class registerPanel extends JPanel {
         JPanel buttonPanel = new JPanel();
 
         userNamePanel.setLayout(new GridLayout(1, 2));
-        JLabel userNameLabel = new JLabel("用户名：");
+        JLabel userNameLabel = new JLabel("用户名：", SwingConstants.RIGHT);
+        userNameLabel.setFont(new Font("黑体", Font.PLAIN, 14));
         userName = new JTextArea();
-        userName.setBorder(new LineBorder(Color.BLACK));
+        userName.setBorder(new EtchedBorder());
+        userName.setFont(new Font("黑体", Font.PLAIN, 14));
         userNamePanel.add(userNameLabel);
         userNamePanel.add(userName);
         userNamePanel.setBorder(new EmptyBorder(17, 400, 16, 400));
 
         passwdPanel.setLayout(new GridLayout(1, 2));
-        JLabel passwdLabel = new JLabel("密码：");
+        JLabel passwdLabel = new JLabel("密码：", SwingConstants.RIGHT);
+        passwdLabel.setFont(new Font("黑体", Font.PLAIN, 14));
         passwd = new JPasswordField();
-        passwd.setBorder(new LineBorder(Color.BLACK));
+        passwd.setBorder(new EtchedBorder());
         passwdPanel.add(passwdLabel);
         passwdPanel.add(passwd);
         passwdPanel.setBorder(new EmptyBorder(17, 400, 16, 400));
 
         addressPanel.setLayout(new GridLayout(1, 2));
-        JLabel addressLabel = new JLabel("地址：");
+        JLabel addressLabel = new JLabel("地址：", SwingConstants.RIGHT);
+        addressLabel.setFont(new Font("黑体", Font.PLAIN, 14));
         address = new JTextArea();
-        address.setBorder(new LineBorder(Color.BLACK));
+        address.setBorder(new EtchedBorder());
+        address.setFont(new Font("黑体", Font.PLAIN, 14));
         addressPanel.add(addressLabel);
         addressPanel.add(address);
         addressPanel.setBorder(new EmptyBorder(17, 400, 16, 400));
 
         contactPanel.setLayout(new GridLayout(1, 2));
-        JLabel contactLabel = new JLabel("联系方式：");
+        JLabel contactLabel = new JLabel("联系方式：", SwingConstants.RIGHT);
+        contactLabel.setFont(new Font("黑体", Font.PLAIN, 14));
         contact = new JTextArea();
-        contact.setBorder(new LineBorder(Color.BLACK));
+        contact.setBorder(new EtchedBorder());
+        contact.setFont(new Font("黑体", Font.PLAIN, 14));
         contactPanel.add(contactLabel);
         contactPanel.add(contact);
         contactPanel.setBorder(new EmptyBorder(17, 400, 16, 400));
 
         buttonPanel.setLayout(new GridLayout(2, 1));
         registerButton = new JButton("注册");
+        registerButton.setFont(new Font("黑体", Font.PLAIN, 14));
         registerButton.setBackground(new Color(0, 191, 255));
         JPanel registerButtonPanel = new JPanel();
         registerButtonPanel.add(registerButton);

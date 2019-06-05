@@ -2,8 +2,8 @@ package Viewer;
 
 import Entities.User;
 
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
 
 public class userPanel extends JPanel {
     private User user;
@@ -23,6 +23,8 @@ public class userPanel extends JPanel {
         // Init labels
         JLabel jLabel1 = new JLabel("用户：");
         JLabel jLabel2 = new JLabel(user.uname);
+        jLabel1.setFont(new Font("黑体", Font.PLAIN, 14));
+        jLabel2.setFont(new Font("黑体", Font.PLAIN, 14));
 
         // Init the button
         JButton logoutButton = new JButton("退出登录");

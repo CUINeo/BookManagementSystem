@@ -47,7 +47,8 @@ public class dbHandler {
     }
 
     public boolean registerQuery(String name, String pwd, String address, String contact) {
-        try (PreparedStatement stmt = connection.prepareStatement("insert users values('" + name + "', '" + pwd + "', 1, '" + address + "', '" + contact + "')")) {
+        try (PreparedStatement stmt = connection.prepareStatement("insert into users " +
+                "values('" + name + "', '" + pwd + "', 1, '" + address + "', '" + contact + "')")) {
             return stmt.executeUpdate() == 1;
         } catch (Exception e) {
             return false;
@@ -82,7 +83,9 @@ public class dbHandler {
     }
 
     public static boolean insertBook(Book book) {
-        try (PreparedStatement stmt = connection.prepareStatement("")) {
+        try (PreparedStatement stmt = connection.prepareStatement("insert into books " +
+                "values('" + book.bname + "', '" + book.publisher + "', '"
+                + book.author + "', " + book.year + ", '" + book.category + "')")) {
             return stmt.executeUpdate() == 1;
         } catch (Exception e) {
             return false;
@@ -90,7 +93,8 @@ public class dbHandler {
     }
 
     public static boolean deleteBook(String bname) {
-        try (PreparedStatement stmt = connection.prepareStatement("delete from books where bname = " + bname)) {
+        try (PreparedStatement stmt = connection.prepareStatement(
+                "delete from books where name = '" + bname + "'")) {
             return stmt.executeUpdate() == 1;
         } catch (Exception e) {
             return false;

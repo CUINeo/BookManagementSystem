@@ -32,9 +32,6 @@ public class Display extends JFrame {
     // Elements in user panel
     private User userInfo;
 
-    // Elements in admin panel
-//    private ArrayList<Book> books;
-
     private Display() {
         super("图书管理系统");
 
@@ -118,7 +115,7 @@ public class Display extends JFrame {
 
         if (dbH.registerQuery(name, pwd, address, contact)) {
             JOptionPane.showMessageDialog(null, "注册成功！",
-                    "消息", JOptionPane.ERROR_MESSAGE);
+                    "消息", JOptionPane.INFORMATION_MESSAGE);
 
             // Return to login panel
             remove(register);
@@ -148,6 +145,7 @@ public class Display extends JFrame {
         add(log, BorderLayout.CENTER);
 
         JLabel infoLabel = new JLabel("图书管理系统");
+        infoLabel.setFont(new Font("黑体", Font.PLAIN, 14));
         add(infoLabel, BorderLayout.SOUTH);
 
         setSize(1000, 600);

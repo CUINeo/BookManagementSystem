@@ -1,9 +1,9 @@
 package Viewer;
 
+import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
-import java.awt.*;
+import javax.swing.border.EtchedBorder;
 
 public class logPanel extends JPanel {
     public JPanel main;
@@ -31,16 +31,19 @@ public class logPanel extends JPanel {
 
         userNamePanel.setLayout(new GridLayout(1, 2));
         JLabel userNameLabel = new JLabel("用户名：");
+        userNameLabel.setFont(new Font("黑体", Font.PLAIN, 14));
         userName = new JTextArea();
-        userName.setBorder(new LineBorder(Color.BLACK));
+        userName.setBorder(new EtchedBorder());
+        userName.setFont(new Font("黑体", Font.PLAIN, 14));
         userNamePanel.add(userNameLabel);
         userNamePanel.add(userName);
         userNamePanel.setBorder(new EmptyBorder(30, 400, 30, 400));
 
         passwdPanel.setLayout(new GridLayout(1, 2));
         JLabel passwdLabel = new JLabel("密码：");
+        passwdLabel.setFont(new Font("黑体", Font.PLAIN, 14));
         passwd = new JPasswordField();
-        passwd.setBorder(new LineBorder(Color.BLACK));
+        passwd.setBorder(new EtchedBorder());
         passwdPanel.add(passwdLabel);
         passwdPanel.add(passwd);
         passwdPanel.setBorder(new EmptyBorder(30, 400, 30, 400));
@@ -48,6 +51,8 @@ public class logPanel extends JPanel {
         buttonPanel.setLayout(new GridLayout(2, 1));
         loginButton = new JButton("登录");
         registerButton = new JButton("注册");
+        loginButton.setFont(new Font("黑体", Font.PLAIN, 14));
+        registerButton.setFont(new Font("黑体", Font.PLAIN, 14));
         loginButton.setBackground(new Color(0, 191, 255));
         registerButton.setBackground(new Color(0, 191, 255));
         JPanel loginButtonPanel = new JPanel();
