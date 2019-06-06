@@ -58,11 +58,11 @@ public class adminPanel extends JPanel {
 
         // Init labels
         JLabel jLabel = new JLabel("管理员");
-        jLabel.setFont(new Font("黑体", Font.PLAIN, 15));
+        jLabel.setFont(new Font("黑体", Font.PLAIN, 14));
 
         // Init the button
         logoutButton = new JButton("退出登录");
-        logoutButton.setFont(new Font("黑体", Font.PLAIN, 15));
+        logoutButton.setFont(new Font("黑体", Font.PLAIN, 14));
         logoutButton.setBackground(new Color(0, 191, 255));
 
         // Add elements to logout panel
@@ -83,11 +83,11 @@ public class adminPanel extends JPanel {
         JLabel yearLabel = new JLabel("出版年份：", SwingConstants.RIGHT);
         JLabel categoryLabel = new JLabel("类别：", SwingConstants.RIGHT);
 
-        nameLabel.setFont(new Font("黑体", Font.PLAIN, 15));
-        authorLabel.setFont(new Font("黑体", Font.PLAIN, 15));
-        publisherLabel.setFont(new Font("黑体", Font.PLAIN, 15));
-        yearLabel.setFont(new Font("黑体", Font.PLAIN, 15));
-        categoryLabel.setFont(new Font("黑体", Font.PLAIN, 15));
+        nameLabel.setFont(new Font("黑体", Font.PLAIN, 14));
+        authorLabel.setFont(new Font("黑体", Font.PLAIN, 14));
+        publisherLabel.setFont(new Font("黑体", Font.PLAIN, 14));
+        yearLabel.setFont(new Font("黑体", Font.PLAIN, 14));
+        categoryLabel.setFont(new Font("黑体", Font.PLAIN, 14));
 
         nameArea = new JTextArea();
         authorArea = new JTextArea();
@@ -95,11 +95,11 @@ public class adminPanel extends JPanel {
         yearArea = new JTextArea();
         categoryArea = new JTextArea();
 
-        nameArea.setFont(new Font("黑体", Font.PLAIN, 15));
-        authorArea.setFont(new Font("黑体", Font.PLAIN, 15));
-        publisherArea.setFont(new Font("黑体", Font.PLAIN, 15));
-        yearArea.setFont(new Font("黑体", Font.PLAIN, 15));
-        categoryArea.setFont(new Font("黑体", Font.PLAIN, 15));
+        nameArea.setFont(new Font("黑体", Font.PLAIN, 14));
+        authorArea.setFont(new Font("黑体", Font.PLAIN, 14));
+        publisherArea.setFont(new Font("黑体", Font.PLAIN, 14));
+        yearArea.setFont(new Font("黑体", Font.PLAIN, 14));
+        categoryArea.setFont(new Font("黑体", Font.PLAIN, 14));
 
         nameArea.setBorder(new EtchedBorder());
         authorArea.setBorder(new EtchedBorder());
@@ -130,7 +130,7 @@ public class adminPanel extends JPanel {
 
         // New button panel
         JButton newButton = new JButton("新建");
-        newButton.setFont(new Font("黑体", Font.PLAIN, 15));
+        newButton.setFont(new Font("黑体", Font.PLAIN, 14));
         newButton.setBackground(new Color(0, 191, 255));
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BorderLayout());
@@ -166,7 +166,7 @@ public class adminPanel extends JPanel {
             return;
         }
 
-        if (!dbHandler.insertBook(new Book(name, author, publisher, category, year))) {
+        if (!dbHandler.insertBook(new Book(name, author, publisher, category, year, true))) {
             JOptionPane.showMessageDialog(null, "书名重复，无法插入！",
                     "错误", JOptionPane.ERROR_MESSAGE);
             return;
@@ -183,21 +183,23 @@ public class adminPanel extends JPanel {
 
         // Create header panel
         JPanel headerPanel = new JPanel();
-        headerPanel.setLayout(new GridLayout(1, 6));
+        headerPanel.setLayout(new GridLayout(1, 7));
 
         JLabel label1 = new JLabel("书名", SwingConstants.CENTER);
         JLabel label2 = new JLabel("作者", SwingConstants.CENTER);
         JLabel label3 = new JLabel("出版商", SwingConstants.CENTER);
         JLabel label4 = new JLabel("出版年份", SwingConstants.CENTER);
         JLabel label5 = new JLabel("类别", SwingConstants.CENTER);
-        JLabel label6 = new JLabel("操作", SwingConstants.CENTER);
+        JLabel label6 = new JLabel("状态", SwingConstants.CENTER);
+        JLabel label7 = new JLabel("操作", SwingConstants.CENTER);
 
-        label1.setFont(new Font("黑体", Font.PLAIN, 15));
-        label2.setFont(new Font("黑体", Font.PLAIN, 15));
-        label3.setFont(new Font("黑体", Font.PLAIN, 15));
-        label4.setFont(new Font("黑体", Font.PLAIN, 15));
-        label5.setFont(new Font("黑体", Font.PLAIN, 15));
-        label6.setFont(new Font("黑体", Font.PLAIN, 15));
+        label1.setFont(new Font("黑体", Font.PLAIN, 14));
+        label2.setFont(new Font("黑体", Font.PLAIN, 14));
+        label3.setFont(new Font("黑体", Font.PLAIN, 14));
+        label4.setFont(new Font("黑体", Font.PLAIN, 14));
+        label5.setFont(new Font("黑体", Font.PLAIN, 14));
+        label6.setFont(new Font("黑体", Font.PLAIN, 14));
+        label7.setFont(new Font("黑体", Font.PLAIN, 14));
 
         headerPanel.add(label1);
         headerPanel.add(label2);
@@ -205,6 +207,7 @@ public class adminPanel extends JPanel {
         headerPanel.add(label4);
         headerPanel.add(label5);
         headerPanel.add(label6);
+        headerPanel.add(label7);
 
         headerPanel.setBorder(new EtchedBorder());
         headerPanel.setPreferredSize(new Dimension(940, 40));
@@ -228,30 +231,39 @@ public class adminPanel extends JPanel {
 
     private JPanel getOneBookInfoPanel(Book book) {
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(1, 6));
+        panel.setLayout(new GridLayout(1, 7));
 
         JLabel nameLabel = new JLabel(book.bname, SwingConstants.CENTER);
         JLabel authorLabel = new JLabel(book.author, SwingConstants.CENTER);
         JLabel publisherLabel = new JLabel(book.publisher, SwingConstants.CENTER);
         JLabel categoryLabel = new JLabel(book.category, SwingConstants.CENTER);
         JLabel yearLabel = new JLabel(Integer.valueOf(book.year).toString(), SwingConstants.CENTER);
+        JLabel availableLabel;
 
-        nameLabel.setFont(new Font("黑体", Font.PLAIN, 15));
-        authorLabel.setFont(new Font("黑体", Font.PLAIN, 15));
-        publisherLabel.setFont(new Font("黑体", Font.PLAIN, 15));
-        categoryLabel.setFont(new Font("黑体", Font.PLAIN, 15));
-        yearLabel.setFont(new Font("黑体", Font.PLAIN, 15));
+        boolean available = book.available;
+        if (available)
+            availableLabel = new JLabel("可借", SwingConstants.CENTER);
+        else
+            availableLabel = new JLabel("在借", SwingConstants.CENTER);
+
+        nameLabel.setFont(new Font("黑体", Font.PLAIN, 14));
+        authorLabel.setFont(new Font("黑体", Font.PLAIN, 14));
+        publisherLabel.setFont(new Font("黑体", Font.PLAIN, 14));
+        categoryLabel.setFont(new Font("黑体", Font.PLAIN, 14));
+        yearLabel.setFont(new Font("黑体", Font.PLAIN, 14));
+        availableLabel.setFont(new Font("黑体", Font.PLAIN, 14));
 
         panel.add(nameLabel);
         panel.add(authorLabel);
         panel.add(publisherLabel);
         panel.add(yearLabel);
         panel.add(categoryLabel);
+        panel.add(availableLabel);
 
         JButton deleteButton = getDeleteButton(book);
         JPanel deleteButtonPanel = new JPanel();
         deleteButtonPanel.setLayout(new BorderLayout());
-        deleteButtonPanel.setBorder(new EmptyBorder(5, 40, 5, 40));
+        deleteButtonPanel.setBorder(new EmptyBorder(5, 30, 5, 30));
         deleteButtonPanel.add(deleteButton, BorderLayout.CENTER);
 
         panel.add(deleteButtonPanel);
@@ -265,7 +277,7 @@ public class adminPanel extends JPanel {
     // ------------------------------ Set delete button ------------------------------------
     private JButton getDeleteButton(Book book) {
         JButton deleteButton =  new JButton("删除");
-        deleteButton.setFont(new Font("黑体", Font.PLAIN, 15));
+        deleteButton.setFont(new Font("黑体", Font.PLAIN, 14));
         deleteButton.setBackground(new Color(0, 191, 255));
 
         // Delete book records in the database
@@ -276,7 +288,7 @@ public class adminPanel extends JPanel {
 
     private void deleteBook(Book book) {
         if (!dbHandler.deleteBook(book.bname)) {
-            JOptionPane.showMessageDialog(null, "选中的图书无法删除！",
+            JOptionPane.showMessageDialog(null, "选中的图书在借中，无法删除！",
                     "错误", JOptionPane.ERROR_MESSAGE);
             return;
         }
