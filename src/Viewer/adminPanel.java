@@ -11,10 +11,13 @@ import javax.swing.border.EtchedBorder;
 import java.util.ArrayList;
 
 public class adminPanel extends JPanel {
+    public JButton logoutButton;
+
     private JScrollPane scrollPane;
 
     private JPanel bookInfoPanel;
     private JPanel newPanel;
+    private JPanel logoutPanel;
 
     private JTextArea nameArea;
     private JTextArea authorArea;
@@ -33,6 +36,10 @@ public class adminPanel extends JPanel {
 
         setLayout(new BorderLayout());
 
+        // Show log out button
+        initLogout();
+        add(logoutPanel, BorderLayout.NORTH);
+
         // Show book information
         getBookInfo();
         add(scrollPane, BorderLayout.CENTER);
@@ -42,6 +49,25 @@ public class adminPanel extends JPanel {
         add(newPanel, BorderLayout.SOUTH);
 
         setBorder(new EmptyBorder(10, 10, 10, 10));
+    }
+
+    // ------------------------------ Init the logout panel --------------------------------
+    private void initLogout() {
+        logoutPanel = new JPanel();
+        logoutPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+        // Init labels
+        JLabel jLabel = new JLabel("管理员");
+        jLabel.setFont(new Font("黑体", Font.PLAIN, 15));
+
+        // Init the button
+        logoutButton = new JButton("退出登录");
+        logoutButton.setFont(new Font("黑体", Font.PLAIN, 15));
+        logoutButton.setBackground(new Color(0, 191, 255));
+
+        // Add elements to logout panel
+        logoutPanel.add(jLabel);
+        logoutPanel.add(logoutButton);
     }
 
     // ------------------------------ Set new button ---------------------------------------
@@ -187,6 +213,7 @@ public class adminPanel extends JPanel {
 
         ArrayList<Book> books = dbHandler.getBooks();
 
+        assert books != null;
         for (Book book : books) {
             JPanel panel = getOneBookInfoPanel(book);
             bookInfoPanel.add(panel);

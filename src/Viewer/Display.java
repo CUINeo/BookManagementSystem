@@ -3,12 +3,11 @@ package Viewer;
 import java.awt.*;
 import javax.swing.*;
 
-import Entities.User;
 import dbOperation.dbHandler;
 
 public class Display extends JFrame {
     // Database handler
-    static dbHandler dbH = new dbHandler();
+    private static dbHandler dbH = new dbHandler();
 
     // Four main panels
     private logPanel log;
@@ -28,9 +27,6 @@ public class Display extends JFrame {
     private JPasswordField regPasswd;
     private JTextArea regContact;
     private JTextArea regAddress;
-
-    // Elements in user panel
-    private User userInfo;
 
     private Display() {
         super("图书管理系统");
@@ -62,19 +58,23 @@ public class Display extends JFrame {
         String pwd = new String(passwd.getPassword());
 
         boolean ret = dbH.loginQuery(name, pwd);
+
         if (ret) {
             // Login success
+            // Clear all information
+            userName.setText("");
+            passwd.setText("");
+
             remove(log);
 
             if (name.equals("admin")) {
                 // Init the admin panel and switch to it
                 initAdmin();
-
                 add(admin, BorderLayout.CENTER);
             }
             else {
                 // Init the user panel and switch to it
-
+                initUser(name);
                 add(user, BorderLayout.CENTER);
             }
 
@@ -132,11 +132,31 @@ public class Display extends JFrame {
     // -------------------- Init the admin panel -----------------------
     private void initAdmin() {
         admin = new adminPanel();
+
+        JButton adminLogoutButton = admin.logoutButton;
+        adminLogoutButton.addActionListener(e -> adminLogout());
+    }
+
+    private void adminLogout() {
+        remove(admin);
+        add(log, BorderLayout.CENTER);
+        setVisible(true);
+        repaint();
     }
 
     // -------------------- Init the user panel ------------------------
-    private void initUser() {
-        user = new userPanel(userInfo);
+    private void initUser(String uname) {
+        user = new userPanel(uname);
+
+        JButton userLogoutButton = user.logoutButton;
+        userLogoutButton.addActionListener(e -> userLogout());
+    }
+
+    private void userLogout() {
+        remove(user);
+        add(log, BorderLayout.CENTER);
+        setVisible(true);
+        repaint();
     }
 
     // -------------------- Show the main frame ------------------------

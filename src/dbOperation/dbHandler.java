@@ -1,6 +1,8 @@
 package dbOperation;
 
 import Entities.Book;
+import Entities.User;
+import Entities.Transaction;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -28,7 +30,6 @@ public class dbHandler {
             System.out.println("Connect to the database successfully!");
         } catch (Exception e) {
             e.printStackTrace();
-            System.exit(0);
         }
     }
 
@@ -40,10 +41,8 @@ public class dbHandler {
             return rs.isBeforeFirst();
         } catch (Exception e) {
             e.printStackTrace();
-            System.exit(0);
+            return false;
         }
-
-        return false;
     }
 
     public boolean registerQuery(String name, String pwd, String address, String contact) {
@@ -76,10 +75,8 @@ public class dbHandler {
             return books;
         } catch (Exception e) {
             e.printStackTrace();
-            System.exit(0);
+            return null;
         }
-
-        return null;
     }
 
     public static boolean insertBook(Book book) {
@@ -98,6 +95,53 @@ public class dbHandler {
             return stmt.executeUpdate() == 1;
         } catch (Exception e) {
             return false;
+        }
+    }
+
+    public static User getUserByName(String uname) {
+        try (Statement stmt = connection.createStatement()) {
+            String userSQL = "select license, address, contact from users where uname = '" + uname +"'";
+            ResultSet rs = stmt.executeQuery(userSQL);
+
+            boolean license = false;
+            String address = "";
+            String contact = "";
+
+            while (rs.next()) {
+                int intLicense = rs.getInt(1);
+
+                if (intLicense == 1)
+                    license = true;
+                else
+                    license = false;
+
+                address = rs.getString(2);
+                contact = rs.getString(3);
+            }
+
+            String transactionSQL = "select bname, author, year, publisher, category, dueDate " +
+                    "from books, users, transactions " +
+                    "where books.name = transactions.bname and transactions.uname = users.uname " +
+                    "and users.uname = '" + uname + "'";
+            System.out.println(transactionSQL);
+            rs = stmt.executeQuery(transactionSQL);
+
+            ArrayList<Transaction> transactions = new ArrayList<>();
+            while (rs.next()) {
+                String bname = rs.getString(1);
+                String author = rs.getString(2);
+                int year = rs.getInt(3);
+                String publisher = rs.getString(4);
+                String category = rs.getString(5);
+                String dueDate = rs.getString(6);
+
+                transactions.add(new Transaction(uname, new Book(bname, author, publisher, category, year), dueDate));
+            }
+
+            return new User(uname, contact, address, license, transactions);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }
