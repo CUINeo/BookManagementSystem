@@ -241,10 +241,14 @@ public class adminPanel extends JPanel {
         JLabel availableLabel;
 
         boolean available = book.available;
-        if (available)
+        if (available) {
             availableLabel = new JLabel("可借", SwingConstants.CENTER);
-        else
+            availableLabel.setForeground(Color.blue);
+        }
+        else {
             availableLabel = new JLabel("在借", SwingConstants.CENTER);
+            availableLabel.setForeground(Color.red);
+        }
 
         nameLabel.setFont(new Font("黑体", Font.PLAIN, 14));
         authorLabel.setFont(new Font("黑体", Font.PLAIN, 14));
