@@ -150,6 +150,15 @@ public class dbHandler {
         }
     }
 
+    public static boolean insertTransaction(String uname, String bname) {
+        try (PreparedStatement stmt = connection.prepareStatement(
+                "insert into transactions values ('" + uname + "', '" + bname + "', '2020-01-01')")) {
+            return stmt.executeUpdate() == 1;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public static boolean deleteTransaction(String uname, String bname) {
         try (PreparedStatement stmt = connection.prepareStatement(
                 "delete from transactions where uname = '" + uname + "' and bname = '" + bname + "'")) {
@@ -162,6 +171,15 @@ public class dbHandler {
     public static void setAvailable(String bname) {
         try (Statement stmt = connection.createStatement()) {
             String SQL = "update books set available = 1 where name = '" + bname + "'";
+            stmt.executeUpdate(SQL);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void setNotAvailable(String bname) {
+        try (Statement stmt = connection.createStatement()) {
+            String SQL = "update books set available = 0 where name = '" + bname + "'";
             stmt.executeUpdate(SQL);
         } catch (Exception e) {
             e.printStackTrace();

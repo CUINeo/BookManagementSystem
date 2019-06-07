@@ -123,7 +123,7 @@ public class userPanel extends JPanel {
         vertical.setValue(vertical.getMinimum());
 
         transactionInfoPanel.validate();
-        repaint();
+        updateUI();
     }
 
     private JPanel getOneTransactionInfoPanel(Transaction transactions) {
@@ -318,14 +318,15 @@ public class userPanel extends JPanel {
 
         // Create header panel
         JPanel headerPanel = new JPanel();
-        headerPanel.setLayout(new GridLayout(1, 6));
+        headerPanel.setLayout(new GridLayout(1, 7));
 
         JLabel label1 = new JLabel("书名", SwingConstants.CENTER);
         JLabel label2 = new JLabel("作者", SwingConstants.CENTER);
         JLabel label3 = new JLabel("出版商", SwingConstants.CENTER);
         JLabel label4 = new JLabel("出版年份", SwingConstants.CENTER);
-        JLabel label5 = new JLabel("状态", SwingConstants.CENTER);
-        JLabel label6 = new JLabel("操作", SwingConstants.CENTER);
+        JLabel label5 = new JLabel("类别", SwingConstants.CENTER);
+        JLabel label6 = new JLabel("状态", SwingConstants.CENTER);
+        JLabel label7 = new JLabel("操作", SwingConstants.CENTER);
 
         label1.setFont(new Font("黑体", Font.PLAIN, 15));
         label2.setFont(new Font("黑体", Font.PLAIN, 15));
@@ -333,6 +334,7 @@ public class userPanel extends JPanel {
         label4.setFont(new Font("黑体", Font.PLAIN, 15));
         label5.setFont(new Font("黑体", Font.PLAIN, 15));
         label6.setFont(new Font("黑体", Font.PLAIN, 15));
+        label7.setFont(new Font("黑体", Font.PLAIN, 15));
 
         headerPanel.add(label1);
         headerPanel.add(label2);
@@ -340,6 +342,7 @@ public class userPanel extends JPanel {
         headerPanel.add(label4);
         headerPanel.add(label5);
         headerPanel.add(label6);
+        headerPanel.add(label7);
 
         headerPanel.setBorder(new EtchedBorder());
         headerPanel.setPreferredSize(new Dimension(940, 40));
@@ -367,11 +370,91 @@ public class userPanel extends JPanel {
         add(escapePanel, BorderLayout.SOUTH);
 
         setVisible(true);
-        repaint();
+        updateUI();
     }
 
     private JPanel getOneBookInfoPanel(Book book) {
-        return new JPanel();
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(1, 7));
+
+        JLabel nameLabel = new JLabel(book.bname, SwingConstants.CENTER);
+        JLabel authorLabel = new JLabel(book.author, SwingConstants.CENTER);
+        JLabel publisherLabel = new JLabel(book.publisher, SwingConstants.CENTER);
+        JLabel categoryLabel = new JLabel(book.category, SwingConstants.CENTER);
+        JLabel yearLabel = new JLabel(Integer.valueOf(book.year).toString(), SwingConstants.CENTER);
+        JLabel availableLabel;
+
+        boolean available = book.available;
+        if (available) {
+            availableLabel = new JLabel("可借", SwingConstants.CENTER);
+            availableLabel.setForeground(Color.blue);
+        }
+        else {
+            availableLabel = new JLabel("在借", SwingConstants.CENTER);
+            availableLabel.setForeground(Color.red);
+        }
+
+        nameLabel.setFont(new Font("黑体", Font.PLAIN, 14));
+        authorLabel.setFont(new Font("黑体", Font.PLAIN, 14));
+        publisherLabel.setFont(new Font("黑体", Font.PLAIN, 14));
+        categoryLabel.setFont(new Font("黑体", Font.PLAIN, 14));
+        yearLabel.setFont(new Font("黑体", Font.PLAIN, 14));
+        availableLabel.setFont(new Font("黑体", Font.PLAIN, 14));
+
+        panel.add(nameLabel);
+        panel.add(authorLabel);
+        panel.add(publisherLabel);
+        panel.add(yearLabel);
+        panel.add(categoryLabel);
+        panel.add(availableLabel);
+
+        JButton borrowButton = getBorrowButton(book);
+        JPanel borrowButtonPanel = new JPanel();
+        borrowButtonPanel.setLayout(new BorderLayout());
+        borrowButtonPanel.setBorder(new EmptyBorder(5, 30, 5, 30));
+        borrowButtonPanel.add(borrowButton, BorderLayout.CENTER);
+
+        panel.add(borrowButtonPanel);
+
+        panel.setBorder(new EtchedBorder());
+        panel.setPreferredSize(new Dimension(940, 40));
+
+        return panel;
+    }
+
+    private JButton getBorrowButton(Book book) {
+        JButton borrowButton =  new JButton("借书");
+        borrowButton.setFont(new Font("黑体", Font.PLAIN, 14));
+        borrowButton.setBackground(new Color(0, 191, 255));
+
+        // Delete book records in the database
+        borrowButton.addActionListener(e -> borrowBook(book));
+
+        return borrowButton;
+    }
+
+    private void borrowBook(Book book) {
+        // Insert one transaction and set available to false
+        if (insertTransaction(book)) {
+            setNotAvailable(book);
+            JOptionPane.showMessageDialog(null, "您已成功借书：《" + book.bname + "》!",
+                    "消息", JOptionPane.INFORMATION_MESSAGE);
+
+            getTransactionInfo();
+            escapeFromSearch();
+            return;
+        }
+
+        JOptionPane.showMessageDialog(null, "该图书处于在借状态！",
+                "错误", JOptionPane.ERROR_MESSAGE);
+    }
+
+    private boolean insertTransaction(Book book) {
+        return dbHandler.insertTransaction(user.uname, book.bname);
+    }
+
+    private void setNotAvailable(Book book) {
+        dbHandler.setNotAvailable(book.bname);
     }
 
     private void escapeFromSearch() {
