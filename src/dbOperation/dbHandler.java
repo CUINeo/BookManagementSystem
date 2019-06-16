@@ -47,7 +47,7 @@ public class dbHandler {
 
     public boolean registerQuery(String name, String pwd, String address, String contact) {
         try (PreparedStatement stmt = connection.prepareStatement("insert into users " +
-                "values('" + name + "', '" + pwd + "', 1, '" + address + "', '" + contact + "')")) {
+                "values('" + name + "', '" + pwd + "', '" + address + "', '" + contact + "')")) {
             return stmt.executeUpdate() == 1;
         } catch (Exception e) {
             return false;
@@ -89,7 +89,7 @@ public class dbHandler {
     public static boolean insertBook(Book book) {
         try (PreparedStatement stmt = connection.prepareStatement("insert into books " +
                 "values('" + book.bname + "', '" + book.publisher + "', '"
-                + book.author + "', " + book.year + ", '" + book.category + "')")) {
+                + book.author + "', " + book.year + ", " + 1 + ", '" + book.category + "')")) {
             return stmt.executeUpdate() == 1;
         } catch (Exception e) {
             return false;
@@ -135,10 +135,7 @@ public class dbHandler {
                 int available = rs.getInt(7);
 
                 boolean a;
-                if (available == 1)
-                    a = true;
-                else
-                    a = false;
+                a = available == 1;
 
                 transactions.add(new Transaction(uname, new Book(bname, author, publisher, category, year, a), dueDate));
             }
@@ -147,6 +144,22 @@ public class dbHandler {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public static boolean checkAvailable(String bname) {
+        try (Statement stmt = connection.createStatement()) {
+            String SQL = "select available from books where name = '" + bname + "'";
+            ResultSet rs = stmt.executeQuery(SQL);
+
+            int res = 0;
+            while (rs.next())
+                res = rs.getInt(1);
+
+            return res == 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
 

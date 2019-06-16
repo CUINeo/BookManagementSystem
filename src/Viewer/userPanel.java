@@ -435,7 +435,7 @@ public class userPanel extends JPanel {
 
     private void borrowBook(Book book) {
         // Insert one transaction and set available to false
-        if (insertTransaction(book)) {
+        if (checkAvailable(book) && insertTransaction(book)) {
             setNotAvailable(book);
             JOptionPane.showMessageDialog(null, "您已成功借书：《" + book.bname + "》!",
                     "消息", JOptionPane.INFORMATION_MESSAGE);
@@ -447,6 +447,10 @@ public class userPanel extends JPanel {
 
         JOptionPane.showMessageDialog(null, "该图书处于在借状态！",
                 "错误", JOptionPane.ERROR_MESSAGE);
+    }
+
+    private boolean checkAvailable(Book book) {
+        return dbHandler.checkAvailable(book.bname);
     }
 
     private boolean insertTransaction(Book book) {

@@ -174,6 +174,14 @@ public class adminPanel extends JPanel {
 
         JOptionPane.showMessageDialog(null, "插入成功！",
                 "消息", JOptionPane.INFORMATION_MESSAGE);
+
+        // Clear areas
+        nameArea.setText("");
+        authorArea.setText("");
+        publisherArea.setText("");
+        yearArea.setText("");
+        categoryArea.setText("");
+
         getBookInfo();
     }
 
